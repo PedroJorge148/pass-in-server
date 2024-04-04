@@ -1,21 +1,18 @@
 import { prisma } from '../src/lib/prisma'
 
 async function seed() {
-  await prisma.checkIn.deleteMany()
-  await prisma.attendee.deleteMany()
-  await prisma.event.deleteMany()
-
   await prisma.event.create({
     data: {
-      id: '5aa4f416-ef41-49df-98b3-c10859790e6c',
-      title: 'Unite summit',
+      id: '9e9bd979-9d10-4915-b339-3786b1634f33',
+      title: 'Unite Summit',
       slug: 'unite-summit',
       details: 'Um evento p/ devs apaixonados(as) por código!',
-      maximumAttendees: 120
+      maximumAttendees: 120,
     }
   })
 }
 
 seed().then(() => {
+  console.log('Database seeded!')
   prisma.$disconnect()
 })

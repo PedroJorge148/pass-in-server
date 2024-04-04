@@ -9,13 +9,13 @@ export async function checkIn(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .get('/attendees/:attendeeId/check-in', {
       schema: {
-        summary: 'Check an attendee',
+        summary: 'Check-in an attendee',
         tags: ['check-ins'],
         params: z.object({
-          attendeeId: z.coerce.number(),
+          attendeeId: z.coerce.number().int()
         }),
         response: {
-          201: z.null()
+          201: z.null(),
         }
       }
     }, async (request, reply) => {
@@ -27,8 +27,8 @@ export async function checkIn(app: FastifyInstance) {
         }
       })
 
-      if (attendeeCheckIn) {
-        throw new BadRequest('Attendee already checked in.')
+      if (attendeeCheckIn !== null) {
+        throw new BadRequest('Attendee already checked in!')
       }
 
       await prisma.checkIn.create({

@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import z from "zod";
+import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { BadRequest } from "./_errors/bad-request";
 
@@ -35,15 +35,15 @@ export async function getAttendeeBadge(app: FastifyInstance) {
           event: {
             select: {
               title: true,
-            }
-          }
+            },
+          },
         },
         where: {
-          id: attendeeId
+          id: attendeeId,
         }
       })
 
-      if (!attendee) {
+      if (attendee === null) {
         throw new BadRequest('Attendee not found.')
       }
 
@@ -56,7 +56,7 @@ export async function getAttendeeBadge(app: FastifyInstance) {
           name: attendee.name,
           email: attendee.email,
           eventTitle: attendee.event.title,
-          checkInURL: checkInURL.toString()
+          checkInURL: checkInURL.toString(),
         }
       })
     })

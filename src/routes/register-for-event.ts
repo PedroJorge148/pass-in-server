@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import z from "zod";
+import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { BadRequest } from "./_errors/bad-request";
 
@@ -20,7 +20,7 @@ export async function registerForEvent(app: FastifyInstance) {
         }),
         response: {
           201: z.object({
-            attendeId: z.number()
+            attendeeId: z.number(),
           })
         }
       }
@@ -28,20 +28,20 @@ export async function registerForEvent(app: FastifyInstance) {
       const { eventId } = request.params
       const { name, email } = request.body
 
-      const attendeFromEmail = await prisma.attendee.findUnique({
+      const attendeeFromEmail = await prisma.attendee.findUnique({
         where: {
           eventId_email: {
-            eventId,
-            email
+            email,
+            eventId
           }
         }
       })
 
-      if (attendeFromEmail) {
-        throw new BadRequest('This email is already registered for this event.')
+      if (attendeeFromEmail !== null) {
+        throw new BadRequest('This e-mail is already registered for this event.')
       }
 
-      const [event, amoutOfAttendesForEvent] = await Promise.all([
+      const [event, amountOfAttendeesForEvent] = await Promise.all([
         prisma.event.findUnique({
           where: {
             id: eventId,
@@ -55,20 +55,18 @@ export async function registerForEvent(app: FastifyInstance) {
         })
       ])
 
-      if (event?.maximumAttendees && amoutOfAttendesForEvent >= event.maximumAttendees) {
+      if (event?.maximumAttendees && amountOfAttendeesForEvent >= event.maximumAttendees) {
         throw new BadRequest('The maximum number of attendees for this event has been reached.')
       }
 
-      const attende = await prisma.attendee.create({
+      const attendee = await prisma.attendee.create({
         data: {
           name,
           email,
-          eventId
+          eventId,
         }
       })
 
-      return reply.status(201).send({
-        attendeId: attende.id,
-      })
+      return reply.status(201).send({ attendeeId: attendee.id })
     })
 }
