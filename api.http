@@ -1,0 +1,37 @@
+POST http://localhost:3333/events
+Content-Type: application/json
+
+{
+  "title": "NLW Unite",
+  "details": "Um evento para quem é apaixonado por programação.",
+  "maximumAttendees": 1
+}
+
+###
+
+POST http://localhost:3333/events/5aa4f416-ef41-49df-98b3-c10859790e6c/attendees
+Content-Type: application/json
+
+{
+  "name": "Pedro Jorge",
+  "email": "pedrojorge2@gmail.com"
+}
+
+###
+
+GET http://localhost:3333/events
+###
+
+GET http://localhost:3333/events/5aa4f416-ef41-49df-98b3-c10859790e6c
+
+###
+
+GET http://localhost:3333/attendees/1/badge
+
+###
+
+GET http://localhost:3333/attendees/2/check-in
+
+###
+
+GET http://localhost:3333/events/5aa4f416-ef41-49df-98b3-c10859790e6c/attendees
