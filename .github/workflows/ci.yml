@@ -32,3 +32,5 @@ jobs:
       - name: Push image
         run: |
           docker push pedrojorge148/pass-in-server:${{ steps.generate_sha.outputs.sha }}
+          docker tag pedrojorge148/pass-in-server:${{ steps.generate_sha.outputs.sha }} pedrojorge148/pass-in-server:latest
+          docker push pedrojorge148/pass-in-server:latest
